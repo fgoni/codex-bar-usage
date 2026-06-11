@@ -1,4 +1,5 @@
-APP_NAME := CodexBarResetBar
+APP_NAME := CodexResetBar
+OLD_APP_NAME := CodexBarResetBar
 CONFIGURATION ?= release
 BUILD_DIR := .build/$(CONFIGURATION)
 APP_DIR := $(BUILD_DIR)/$(APP_NAME).app
@@ -30,15 +31,17 @@ app: build
 	cp "Assets/$(ICON_FILE)" "$(RESOURCES)/$(ICON_FILE)"
 	/usr/libexec/PlistBuddy -c "Clear dict" "$(CONTENTS)/Info.plist" 2>/dev/null || true
 	/usr/libexec/PlistBuddy -c "Add :CFBundleExecutable string $(APP_NAME)" "$(CONTENTS)/Info.plist"
-	/usr/libexec/PlistBuddy -c "Add :CFBundleIdentifier string com.lcc.codexbarresetbar" "$(CONTENTS)/Info.plist"
+	/usr/libexec/PlistBuddy -c "Add :CFBundleIdentifier string com.lcc.codexresetbar" "$(CONTENTS)/Info.plist"
 	/usr/libexec/PlistBuddy -c "Add :CFBundleName string $(APP_NAME)" "$(CONTENTS)/Info.plist"
 	/usr/libexec/PlistBuddy -c "Add :CFBundlePackageType string APPL" "$(CONTENTS)/Info.plist"
 	/usr/libexec/PlistBuddy -c "Add :CFBundleIconFile string AppIcon" "$(CONTENTS)/Info.plist"
 	/usr/libexec/PlistBuddy -c "Add :LSUIElement bool true" "$(CONTENTS)/Info.plist"
 
 install: app
-	-pkill -x "$(APP_NAME)"
+	pkill -x "$(APP_NAME)" || true
+	pkill -x "$(OLD_APP_NAME)" || true
 	rm -rf "/Applications/$(APP_NAME).app"
+	rm -rf "/Applications/$(OLD_APP_NAME).app"
 	cp -R "$(APP_DIR)" /Applications/
 	open "/Applications/$(APP_NAME).app"
 

@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/app-icon.png" width="112" height="112" alt="Codex Bar Usage app icon">
+  <img src="docs/app-icon.png" width="112" height="112" alt="CodexResetBar app icon">
 </p>
 
-<h1 align="center">Codex Bar Usage</h1>
+<h1 align="center">CodexResetBar</h1>
 
 <p align="center">
   A small macOS menu bar companion for CodexBar that keeps provider reset timers visible at a glance.
@@ -14,11 +14,11 @@
   <img alt="License" src="https://img.shields.io/badge/license-not%20specified-lightgrey">
 </p>
 
-![Codex Bar Usage banner](docs/readme-banner.svg)
+![CodexResetBar banner](docs/readme-banner.svg)
 
 ## What It Does
 
-CodexBar already shows usage percentages in the macOS menu bar. Codex Bar Usage fills the smaller gap: it shows how long remains until the current 5-hour limits reset.
+CodexBar already shows usage percentages in the macOS menu bar. CodexResetBar fills the smaller gap: it shows how long remains until the current 5-hour limits reset.
 
 The menu bar title stays compact:
 
@@ -82,7 +82,7 @@ That keeps this app focused on display and lets CodexBar own auth, parsing, and 
 make install
 ```
 
-`make install` builds the release binary, copies the app to `/Applications/CodexBarResetBar.app`, restarts any existing copy, and opens the new one.
+`make install` builds the release binary, copies the app to `/Applications/CodexResetBar.app`, restarts any existing copy, and opens the new one.
 
 ## Development
 
@@ -95,9 +95,19 @@ make install
 
 `make icon` regenerates `Assets/AppIcon.icns` from `Assets/AppIcon.svg`. The generated app bundle includes the app icon, provider SVG resources, and an `LSUIElement` setting so the app stays out of the Dock.
 
+## Logs
+
+CodexResetBar writes provider and CodexBar CLI activity to unified logging:
+
+```bash
+log stream --predicate 'subsystem == "com.lcc.codexresetbar"' --style compact
+```
+
+Useful events include provider toggles, refresh starts, CodexBar command attempts, provider reset successes, and provider fetch failures.
+
 ## Human Guidelines
 
-Use `make install` for local installs. It copies the app to `/Applications/CodexBarResetBar.app` and opens it.
+Use `make install` for local installs. It copies the app to `/Applications/CodexResetBar.app` and opens it.
 
 ## Agent Guidelines
 
@@ -112,8 +122,8 @@ make install
 
 ```text
 Assets/                         App icon source and generated .icns
-Sources/CodexBarResetBar/       AppKit menu bar app
-Tests/CodexBarResetBarTests/    Swift Testing coverage
+Sources/CodexResetBar/          AppKit menu bar app
+Tests/CodexResetBarTests/       Swift Testing coverage
 scripts/                        Local asset generation scripts
 ```
 
@@ -123,4 +133,4 @@ Created by Facundo Goni as a companion utility for CodexBar.
 
 ## Notes
 
-Codex Bar Usage is intentionally small. It is not a replacement for CodexBar, and it does not manage authentication. If a provider stops showing reset data, verify that CodexBar can read that provider first.
+CodexResetBar is intentionally small. It is not a replacement for CodexBar, and it does not manage authentication. If a provider stops showing reset data, verify that CodexBar can read that provider first.

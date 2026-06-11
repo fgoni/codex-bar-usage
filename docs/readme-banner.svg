@@ -1,6 +1,6 @@
 <svg width="1280" height="520" viewBox="0 0 1280 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">Codex Bar Usage banner</title>
-  <desc id="desc">A dark product banner for Codex Bar Usage showing the app icon and a simulated macOS menu bar reset timer.</desc>
+  <title id="title">CodexResetBar banner</title>
+  <desc id="desc">A dark product banner for CodexResetBar showing the app icon and a simulated macOS menu bar reset timer.</desc>
   <defs>
     <linearGradient id="bg" x1="102" y1="42" x2="1190" y2="492" gradientUnits="userSpaceOnUse">
       <stop stop-color="#1E252B"/>
@@ -37,7 +37,7 @@
     <rect x="218" y="285" width="24" height="7" rx="3.5" fill="white" fill-opacity="0.65"/>
   </g>
 
-  <text x="380" y="177" fill="white" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="62" font-weight="700" letter-spacing="0">Codex Bar Usage</text>
+  <text x="380" y="177" fill="white" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="62" font-weight="700" letter-spacing="0">CodexResetBar</text>
   <text x="383" y="231" fill="#D7DDE2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="450">Keep Claude and Codex 5-hour reset timers visible in the macOS menu bar.</text>
 
   <g filter="url(#softShadow)">

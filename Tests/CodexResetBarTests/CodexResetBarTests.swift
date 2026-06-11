@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import CodexBarResetBar
+@testable import CodexResetBar
 
 @Test
 func parsesPrimaryResetFromCodexBarJSON() throws {
@@ -102,7 +102,7 @@ func displaysErrorWhenResetIsUnavailable() {
 @MainActor
 @Test
 func providerSettingsPersistEnabledProvidersAndKeepOneActive() {
-    let suiteName = "CodexBarResetBarTests.\(UUID().uuidString)"
+    let suiteName = "CodexResetBarTests.\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: suiteName)!
     defer { defaults.removePersistentDomain(forName: suiteName) }
 

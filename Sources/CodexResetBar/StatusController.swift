@@ -17,6 +17,7 @@ final class StatusController: NSObject {
         self.client = client
         self.settingsStore = settingsStore
         super.init()
+        AppLog.app.info("Starting CodexResetBar")
         self.configureStatusItem()
         self.configureMenu()
         self.refresh()
@@ -108,6 +109,7 @@ final class StatusController: NSObject {
         if self.refreshTask != nil { return }
         self.statusItem.button?.toolTip = "Refreshing \(self.providerListText()) reset timers..."
         let providers = self.settingsStore.enabledProviders
+        AppLog.providers.info("Refreshing providers: \(providers.map(\.displayName).joined(separator: ", "), privacy: .public)")
 
         self.refreshTask = Task { [client] in
             let resets = await withTaskGroup(of: ProviderReset.self, returning: [ProviderReset].self) { group in
@@ -179,6 +181,8 @@ final class StatusController: NSObject {
         }
 
         self.settingsStore.setEnabled(!self.settingsStore.isEnabled(provider), for: provider)
+        let isEnabled = self.settingsStore.isEnabled(provider)
+        AppLog.providers.info("Provider \(provider.displayName, privacy: .public) \(isEnabled ? "enabled" : "disabled", privacy: .public)")
         self.snapshot = nil
         self.updateTitle()
         self.rebuildMenu()

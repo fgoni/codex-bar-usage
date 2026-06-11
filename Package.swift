@@ -2,22 +2,22 @@
 import PackageDescription
 
 let package = Package(
-    name: "CodexBarResetBar",
+    name: "CodexResetBar",
     platforms: [
         .macOS(.v14),
     ],
     products: [
-        .executable(name: "CodexBarResetBar", targets: ["CodexBarResetBar"]),
+        .executable(name: "CodexResetBar", targets: ["CodexResetBar"]),
     ],
     targets: [
         .executableTarget(
-            name: "CodexBarResetBar",
-            path: "Sources/CodexBarResetBar",
+            name: "CodexResetBar",
+            path: "Sources/CodexResetBar",
             resources: [
                 .process("Resources"),
             ]),
         .testTarget(
-            name: "CodexBarResetBarTests",
-            dependencies: ["CodexBarResetBar"],
-            path: "Tests/CodexBarResetBarTests"),
+            name: "CodexResetBarTests",
+            dependencies: ["CodexResetBar"],
+            path: "Tests/CodexResetBarTests"),
     ])

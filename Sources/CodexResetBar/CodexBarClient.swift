@@ -36,17 +36,22 @@ final class CodexBarClient: CodexBarRunning, @unchecked Sendable {
 
         for args in attempts {
             do {
+                AppLog.codexbar.info("Running codexbar for \(provider.displayName, privacy: .public): \(args.joined(separator: " "), privacy: .public)")
                 let data = try await self.run(args)
                 let parsed = try CodexBarJSON.parse(data, expectedProvider: provider)
                 if parsed.resetsAt != nil || parsed.resetDescription != nil {
+                    AppLog.codexbar.info("Loaded reset for \(provider.displayName, privacy: .public) from \(parsed.source ?? "unknown", privacy: .public)")
                     return parsed
                 }
                 lastError = parsed.errorMessage ?? "No reset returned"
+                AppLog.codexbar.warning("No reset returned for \(provider.displayName, privacy: .public): \(lastError ?? "unknown", privacy: .public)")
             } catch {
                 lastError = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+                AppLog.codexbar.warning("codexbar failed for \(provider.displayName, privacy: .public): \(lastError ?? "unknown", privacy: .public)")
             }
         }
 
+        AppLog.codexbar.error("Giving up on \(provider.displayName, privacy: .public): \(lastError ?? "Unknown error", privacy: .public)")
         return ProviderReset(
             provider: provider,
             resetsAt: nil,
@@ -71,6 +76,7 @@ final class CodexBarClient: CodexBarRunning, @unchecked Sendable {
 
     private func run(_ arguments: [String]) async throws -> Data {
         guard FileManager.default.isExecutableFile(atPath: self.executableURL.path) else {
+            AppLog.codexbar.error("codexbar CLI not found at \(self.executableURL.path, privacy: .public)")
             throw CodexBarClientError.executableNotFound
         }
 
@@ -108,6 +114,7 @@ final class CodexBarClient: CodexBarRunning, @unchecked Sendable {
         process.waitUntilExit()
 
         if timedOut {
+            AppLog.codexbar.error("codexbar timed out: \(arguments.joined(separator: " "), privacy: .public)")
             throw CodexBarClientError.timedOut
         }
 
