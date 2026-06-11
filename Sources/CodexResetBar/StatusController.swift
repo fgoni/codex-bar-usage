@@ -90,7 +90,7 @@ final class StatusController: NSObject {
     private func makeTitle(parts: [(Provider, String)]) -> NSAttributedString {
         let result = NSMutableAttributedString()
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: NSFont.monospacedDigitSystemFont(ofSize: NSFont.systemFontSize, weight: .medium),
+            .font: NSFont.menuBarFont(ofSize: 0),
             .foregroundColor: NSColor.white,
         ]
 
