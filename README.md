@@ -5,7 +5,7 @@
 <h1 align="center">CodexResetBar</h1>
 
 <p align="center">
-  A small macOS menu bar companion for CodexBar that keeps provider reset timers visible at a glance.
+  A small macOS menu bar companion for <a href="https://github.com/steipete/CodexBar">CodexBar</a> that keeps provider reset timers visible at a glance.
 </p>
 
 <p align="center">
@@ -18,7 +18,7 @@
 
 ## What It Does
 
-CodexBar already shows usage percentages in the macOS menu bar. CodexResetBar fills the smaller gap: it shows how long remains until the current 5-hour limits reset.
+[CodexBar](https://github.com/steipete/CodexBar) already shows usage percentages in the macOS menu bar. CodexResetBar fills the smaller gap: it shows how long remains until the current 5-hour limits reset.
 
 The menu bar title stays compact:
 
