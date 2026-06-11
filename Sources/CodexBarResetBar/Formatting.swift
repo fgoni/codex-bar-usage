@@ -1,18 +1,24 @@
 import Foundation
 
 enum ResetFormatter {
-    static func menuTitleParts(for snapshot: ResetSnapshot, now: Date = .init()) -> [(Provider, String)] {
-        [
-            (.claude, self.compactTitle(for: snapshot.reset(for: .claude), now: now)),
-            (.codex, self.compactTitle(for: snapshot.reset(for: .codex), now: now)),
-        ]
+    static func menuTitleParts(
+        for snapshot: ResetSnapshot,
+        providers: [Provider] = Provider.allCases,
+        now: Date = .init()) -> [(Provider, String)]
+    {
+        providers.map { provider in
+            (provider, self.compactTitle(for: snapshot.reset(for: provider), now: now))
+        }
     }
 
-    static func menuTitle(for snapshot: ResetSnapshot, now: Date = .init()) -> String {
-        let parts = self.menuTitleParts(for: snapshot, now: now)
-        let claude = parts.first { $0.0 == .claude }?.1 ?? "--"
-        let codex = parts.first { $0.0 == .codex }?.1 ?? "--"
-        return "Claude \(claude)   Codex \(codex)"
+    static func menuTitle(
+        for snapshot: ResetSnapshot,
+        providers: [Provider] = Provider.allCases,
+        now: Date = .init()) -> String
+    {
+        self.menuTitleParts(for: snapshot, providers: providers, now: now)
+            .map { "\($0.displayName) \($1)" }
+            .joined(separator: "   ")
     }
 
     static func compactTitle(for reset: ProviderReset?, now: Date = .init()) -> String {

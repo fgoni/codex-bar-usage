@@ -55,6 +55,8 @@ func formatsCompactMenuTitle() {
         fetchedAt: now)
 
     #expect(ResetFormatter.menuTitle(for: snapshot, now: now) == "Claude 2h20m   Codex 1h48m")
+    #expect(ResetFormatter.menuTitle(for: snapshot, providers: [.codex], now: now) == "Codex 1h48m")
+    #expect(ResetFormatter.menuTitle(for: snapshot, providers: [.claude], now: now) == "Claude 2h20m")
 }
 
 @Test
@@ -70,4 +72,27 @@ func displaysErrorWhenResetIsUnavailable() {
 
     #expect(ResetFormatter.compactTitle(for: reset) == "err")
     #expect(ResetFormatter.menuDetail(for: reset).contains("codexbar timed out"))
+}
+
+@MainActor
+@Test
+func providerSettingsPersistEnabledProvidersAndKeepOneActive() {
+    let suiteName = "CodexBarResetBarTests.\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suiteName)!
+    defer { defaults.removePersistentDomain(forName: suiteName) }
+
+    let store = ProviderSettingsStore(defaults: defaults)
+
+    #expect(store.enabledProviders == Provider.allCases)
+
+    store.setEnabled(false, for: .claude)
+    #expect(store.enabledProviders == [.codex])
+    #expect(!store.isEnabled(.claude))
+    #expect(store.isEnabled(.codex))
+
+    store.setEnabled(false, for: .codex)
+    #expect(store.enabledProviders == [.codex])
+
+    store.setEnabled(true, for: .claude)
+    #expect(store.enabledProviders == [.codex, .claude])
 }

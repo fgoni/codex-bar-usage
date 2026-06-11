@@ -37,6 +37,7 @@ app: build
 	/usr/libexec/PlistBuddy -c "Add :LSUIElement bool true" "$(CONTENTS)/Info.plist"
 
 install: app
+	-pkill -x "$(APP_NAME)"
 	rm -rf "/Applications/$(APP_NAME).app"
 	cp -R "$(APP_DIR)" /Applications/
 	open "/Applications/$(APP_NAME).app"

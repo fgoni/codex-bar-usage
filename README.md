@@ -13,6 +13,8 @@ The menu bar title is compact:
 [Claude icon] 2h20m   [Codex icon] 1h48m
 ```
 
+Click the menu bar item and use `Providers` to choose which CodexBar providers are shown. The app currently supports Claude and Codex reset timers, and it keeps at least one provider enabled.
+
 ## Human Guidelines
 
 Use `make install` for local installs. It copies the app to `/Applications/CodexBarResetBar.app` and opens it.
