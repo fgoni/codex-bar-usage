@@ -5,12 +5,7 @@ enum BrandIcon {
     private static let size = NSSize(width: 16, height: 16)
 
     static func image(for provider: Provider, color: NSColor = .white) -> NSImage? {
-        let resourceName = switch provider {
-        case .claude: "ProviderIcon-claude"
-        case .codex: "ProviderIcon-codex"
-        }
-
-        guard let url = Bundle.module.url(forResource: resourceName, withExtension: "svg"),
+        guard let url = Bundle.module.url(forResource: provider.iconResourceName, withExtension: "svg"),
               let source = NSImage(contentsOf: url)
         else {
             return nil

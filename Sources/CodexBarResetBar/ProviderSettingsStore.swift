@@ -13,8 +13,8 @@ struct ProviderSettingsStore {
         let raw = self.defaults.stringArray(forKey: self.key)
         let providers = raw?
             .compactMap(Provider.init(rawValue:))
-            .filter { Provider.allCases.contains($0) } ?? Provider.allCases
-        return providers.isEmpty ? Provider.allCases : providers
+            .filter { Provider.allCases.contains($0) } ?? Provider.defaultEnabled
+        return providers.isEmpty ? Provider.defaultEnabled : providers
     }
 
     func isEnabled(_ provider: Provider) -> Bool {

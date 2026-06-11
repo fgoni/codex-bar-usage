@@ -3,7 +3,7 @@ import Foundation
 enum ResetFormatter {
     static func menuTitleParts(
         for snapshot: ResetSnapshot,
-        providers: [Provider] = Provider.allCases,
+        providers: [Provider] = Provider.defaultEnabled,
         now: Date = .init()) -> [(Provider, String)]
     {
         providers.map { provider in
@@ -13,7 +13,7 @@ enum ResetFormatter {
 
     static func menuTitle(
         for snapshot: ResetSnapshot,
-        providers: [Provider] = Provider.allCases,
+        providers: [Provider] = Provider.defaultEnabled,
         now: Date = .init()) -> String
     {
         self.menuTitleParts(for: snapshot, providers: providers, now: now)

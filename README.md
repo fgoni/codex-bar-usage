@@ -5,7 +5,7 @@
 <h1 align="center">Codex Bar Usage</h1>
 
 <p align="center">
-  A small macOS menu bar companion for CodexBar that keeps Claude and Codex 5-hour reset timers visible at a glance.
+  A small macOS menu bar companion for CodexBar that keeps provider reset timers visible at a glance.
 </p>
 
 <p align="center">
@@ -30,13 +30,31 @@ Click the menu bar item to see details, refresh manually, quit the app, or choos
 
 ## Features
 
-- Shows Claude and Codex 5-hour reset countdowns directly in the menu bar.
-- Uses the same Claude and Codex SVG marks bundled in CodexBar.
+- Shows enabled provider reset countdowns directly in the menu bar.
+- Ships with CodexBar-style SVG marks for supported providers.
 - Reads usage data through the local `codexbar` command-line interface.
 - Lets you choose visible providers from a `Providers` submenu.
 - Persists provider visibility with `UserDefaults`.
 - Keeps at least one provider enabled.
 - Installs as a menu bar-only app with no Dock icon.
+
+## Supported Providers
+
+Claude and Codex are enabled by default. The provider picker can also show:
+
+- Cursor
+- MiniMax
+- Grok
+- Groq Cloud
+- z.ai
+- Gemini
+- Antigravity
+- Copilot
+- OpenRouter
+- Kilo
+- Kiro
+- Droid / Factory
+- Vertex AI
 
 ## Data Sources
 
@@ -45,6 +63,7 @@ The app shells out to CodexBar instead of talking to provider APIs directly:
 ```bash
 codexbar usage --provider codex --format json --source cli
 codexbar usage --provider claude --format json --source oauth
+codexbar usage --provider <provider> --format json --source auto
 ```
 
 That keeps this app focused on display and lets CodexBar own auth, parsing, and provider-specific behavior.
@@ -55,7 +74,7 @@ That keeps this app focused on display and lets CodexBar own auth, parsing, and 
 - Swift Package Manager for development.
 - CodexBar installed.
 - The `codexbar` CLI available at `/opt/homebrew/bin/codexbar`.
-- Valid local Codex and Claude sessions for the providers you enable.
+- Valid local sessions, cookies, or tokens for the providers you enable.
 
 ## Install Locally
 

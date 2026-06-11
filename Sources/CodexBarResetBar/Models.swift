@@ -3,18 +3,65 @@ import Foundation
 enum Provider: String, CaseIterable, Sendable {
     case claude
     case codex
+    case cursor
+    case minimax
+    case grok
+    case groqCloud = "groqcloud"
+    case zai
+    case gemini
+    case antigravity
+    case copilot
+    case openRouter = "openrouter"
+    case kilo
+    case kiro
+    case factory
+    case vertexAI = "vertexai"
+
+    static let defaultEnabled: [Provider] = [.claude, .codex]
 
     var displayName: String {
         switch self {
         case .claude: "Claude"
         case .codex: "Codex"
+        case .cursor: "Cursor"
+        case .minimax: "MiniMax"
+        case .grok: "Grok"
+        case .groqCloud: "Groq Cloud"
+        case .zai: "z.ai"
+        case .gemini: "Gemini"
+        case .antigravity: "Antigravity"
+        case .copilot: "Copilot"
+        case .openRouter: "OpenRouter"
+        case .kilo: "Kilo"
+        case .kiro: "Kiro"
+        case .factory: "Droid"
+        case .vertexAI: "Vertex AI"
         }
     }
 
     var menuSymbol: String {
+        String(self.displayName.prefix(1))
+    }
+
+    var codexBarProviderID: String {
+        self.rawValue
+    }
+
+    var payloadProviderIDs: Set<String> {
         switch self {
-        case .claude: "C"
-        case .codex: "X"
+        case .groqCloud:
+            [self.rawValue, "groq"]
+        default:
+            [self.rawValue]
+        }
+    }
+
+    var iconResourceName: String {
+        switch self {
+        case .groqCloud:
+            "ProviderIcon-groq"
+        default:
+            "ProviderIcon-\(self.rawValue)"
         }
     }
 }
@@ -70,7 +117,7 @@ enum CodexBarJSON {
 
     static func parse(_ data: Data, expectedProvider: Provider) throws -> ProviderReset {
         let payloads = try self.decoder.decode([CodexBarPayload].self, from: data)
-        let match = payloads.first { $0.provider == expectedProvider.rawValue } ?? payloads.first
+        let match = payloads.first { expectedProvider.payloadProviderIDs.contains($0.provider) } ?? payloads.first
 
         guard let match else {
             return ProviderReset(

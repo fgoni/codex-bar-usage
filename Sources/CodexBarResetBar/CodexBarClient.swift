@@ -58,12 +58,14 @@ final class CodexBarClient: CodexBarRunning, @unchecked Sendable {
     }
 
     private func arguments(for provider: Provider) -> [[String]] {
-        let base = ["usage", "--provider", provider.rawValue, "--format", "json"]
+        let base = ["usage", "--provider", provider.codexBarProviderID, "--format", "json"]
         switch provider {
         case .codex:
             return [base + ["--source", "cli"], base + ["--source", "auto"]]
         case .claude:
             return [base + ["--source", "oauth"], base + ["--source", "auto"], base + ["--source", "cli"]]
+        default:
+            return [base + ["--source", "auto"], base]
         }
     }
 

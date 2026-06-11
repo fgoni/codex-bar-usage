@@ -31,6 +31,31 @@ func parsesPrimaryResetFromCodexBarJSON() throws {
 }
 
 @Test
+func parsesProviderPayloadAlias() throws {
+    let json = """
+    [
+      {
+        "provider": "groq",
+        "source": "api",
+        "usage": {
+          "primary": {
+            "resetsAt": "2026-06-11T15:47:09Z",
+            "usedPercent": 12
+          },
+          "updatedAt": "2026-06-11T14:42:43Z"
+        }
+      }
+    ]
+    """.data(using: .utf8)!
+
+    let reset = try CodexBarJSON.parse(json, expectedProvider: .groqCloud)
+
+    #expect(reset.provider == .groqCloud)
+    #expect(reset.source == "api")
+    #expect(reset.usedPercent == 12)
+}
+
+@Test
 func formatsCompactMenuTitle() {
     let now = ISO8601DateFormatter().date(from: "2026-06-11T14:00:00Z")!
     let snapshot = ResetSnapshot(
@@ -83,7 +108,7 @@ func providerSettingsPersistEnabledProvidersAndKeepOneActive() {
 
     let store = ProviderSettingsStore(defaults: defaults)
 
-    #expect(store.enabledProviders == Provider.allCases)
+    #expect(store.enabledProviders == Provider.defaultEnabled)
 
     store.setEnabled(false, for: .claude)
     #expect(store.enabledProviders == [.codex])
@@ -95,4 +120,7 @@ func providerSettingsPersistEnabledProvidersAndKeepOneActive() {
 
     store.setEnabled(true, for: .claude)
     #expect(store.enabledProviders == [.codex, .claude])
+
+    store.setEnabled(true, for: .gemini)
+    #expect(store.enabledProviders == [.codex, .claude, .gemini])
 }
