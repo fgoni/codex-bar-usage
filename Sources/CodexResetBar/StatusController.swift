@@ -89,16 +89,20 @@ final class StatusController: NSObject {
 
     private func makeTitle(parts: [(Provider, String)]) -> NSAttributedString {
         let result = NSMutableAttributedString()
+        var foregroundColor = NSColor.labelColor
+        self.statusItem.button?.effectiveAppearance.performAsCurrentDrawingAppearance {
+            foregroundColor = NSColor.labelColor
+        }
         let attributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.menuBarFont(ofSize: 0),
-            .foregroundColor: NSColor.white,
+            .foregroundColor: foregroundColor,
         ]
 
         for (index, part) in parts.enumerated() {
             if index > 0 {
                 result.append(NSAttributedString(string: "   ", attributes: attributes))
             }
-            result.append(BrandIcon.attachment(for: part.0))
+            result.append(BrandIcon.attachment(for: part.0, color: .white))
             result.append(NSAttributedString(string: " \(part.1)", attributes: attributes))
         }
 
