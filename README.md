@@ -17,6 +17,7 @@ Cl 2h20m | Cx 1h48m
 
 ```bash
 make test
+make icon
 make app
 make install
 ```
