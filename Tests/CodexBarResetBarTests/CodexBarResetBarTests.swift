@@ -54,7 +54,7 @@ func formatsCompactMenuTitle() {
         ],
         fetchedAt: now)
 
-    #expect(ResetFormatter.menuTitle(for: snapshot, now: now) == "Cl 2h20m | Cx 1h48m")
+    #expect(ResetFormatter.menuTitle(for: snapshot, now: now) == "Claude 2h20m   Codex 1h48m")
 }
 
 @Test

@@ -12,7 +12,7 @@ enum ResetFormatter {
         let parts = self.menuTitleParts(for: snapshot, now: now)
         let claude = parts.first { $0.0 == .claude }?.1 ?? "--"
         let codex = parts.first { $0.0 == .codex }?.1 ?? "--"
-        return "Cl \(claude) | Cx \(codex)"
+        return "Claude \(claude)   Codex \(codex)"
     }
 
     static func compactTitle(for reset: ProviderReset?, now: Date = .init()) -> String {

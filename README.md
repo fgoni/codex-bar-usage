@@ -10,7 +10,20 @@ The app reads data through the CodexBar CLI:
 The menu bar title is compact:
 
 ```text
-Cl 2h20m | Cx 1h48m
+[Claude icon] 2h20m   [Codex icon] 1h48m
+```
+
+## Human Guidelines
+
+Use `make install` for local installs. It copies the app to `/Applications/CodexBarResetBar.app` and opens it.
+
+## Agent Guidelines
+
+After changing app behavior, resources, packaging, or menu bar rendering, run the tests and install the app so the local menu bar copy reflects the change:
+
+```bash
+make test
+make install
 ```
 
 ## Commands
