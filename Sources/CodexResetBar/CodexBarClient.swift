@@ -25,7 +25,7 @@ final class CodexBarClient: CodexBarRunning, @unchecked Sendable {
     private let executableURL: URL
     private let timeout: TimeInterval
 
-    init(executablePath: String = "/opt/homebrew/bin/codexbar", timeout: TimeInterval = 20) {
+    init(executablePath: String = "/opt/homebrew/bin/codexbar", timeout: TimeInterval = 45) {
         self.executableURL = URL(fileURLWithPath: executablePath)
         self.timeout = timeout
     }
@@ -91,30 +91,10 @@ final class CodexBarClient: CodexBarRunning, @unchecked Sendable {
 
         try process.run()
 
-        let timedOut = await withTaskGroup(of: Bool.self, returning: Bool.self) { group in
-            group.addTask {
-                while process.isRunning {
-                    try? await Task.sleep(for: .milliseconds(100))
-                }
-                return false
-            }
-            group.addTask {
-                try? await Task.sleep(for: .seconds(self.timeout))
-                if process.isRunning {
-                    process.terminate()
-                    return true
-                }
-                return false
-            }
-            let result = await group.next() ?? false
-            group.cancelAll()
-            return result
-        }
-
-        process.waitUntilExit()
+        let timedOut = await self.waitForTermination(of: process, arguments: arguments)
+        process.terminationHandler = nil
 
         if timedOut {
-            AppLog.codexbar.error("codexbar timed out: \(arguments.joined(separator: " "), privacy: .public)")
             throw CodexBarClientError.timedOut
         }
 
@@ -126,5 +106,49 @@ final class CodexBarClient: CodexBarRunning, @unchecked Sendable {
         let errorData = stderr.fileHandleForReading.readDataToEndOfFile()
         let message = String(data: errorData, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
         throw CodexBarClientError.failed(message?.isEmpty == false ? message! : "codexbar exited with \(process.terminationStatus)")
+    }
+
+    private func waitForTermination(of process: Process, arguments: [String]) async -> Bool {
+        await withCheckedContinuation { continuation in
+            let observer = ProcessTerminationObserver(continuation: continuation)
+
+            process.terminationHandler = { _ in
+                observer.resume(timedOut: false)
+            }
+
+            DispatchQueue.global().asyncAfter(deadline: .now() + self.timeout) {
+                guard process.isRunning else {
+                    observer.resume(timedOut: false)
+                    return
+                }
+
+                AppLog.codexbar.error("codexbar timed out: \(arguments.joined(separator: " "), privacy: .public)")
+                process.terminate()
+                observer.resume(timedOut: true)
+            }
+
+            if !process.isRunning {
+                observer.resume(timedOut: false)
+            }
+        }
+    }
+}
+
+private final class ProcessTerminationObserver: @unchecked Sendable {
+    private let lock = NSLock()
+    private var didResume = false
+    private let continuation: CheckedContinuation<Bool, Never>
+
+    init(continuation: CheckedContinuation<Bool, Never>) {
+        self.continuation = continuation
+    }
+
+    func resume(timedOut: Bool) {
+        self.lock.lock()
+        defer { self.lock.unlock() }
+
+        guard !self.didResume else { return }
+        self.didResume = true
+        self.continuation.resume(returning: timedOut)
     }
 }

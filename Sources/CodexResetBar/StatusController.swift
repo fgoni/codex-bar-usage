@@ -110,7 +110,10 @@ final class StatusController: NSObject {
     }
 
     private func refresh() {
-        if self.refreshTask != nil { return }
+        if self.refreshTask != nil {
+            AppLog.providers.warning("Refresh ignored because a refresh is already running")
+            return
+        }
         self.statusItem.button?.toolTip = "Refreshing \(self.providerListText()) reset timers..."
         let providers = self.settingsStore.enabledProviders
         AppLog.providers.info("Refreshing providers: \(providers.map(\.displayName).joined(separator: ", "), privacy: .public)")
@@ -137,6 +140,7 @@ final class StatusController: NSObject {
             await MainActor.run {
                 self.snapshot = snapshot
                 self.refreshTask = nil
+                AppLog.providers.info("Refresh completed for \(resets.map { $0.provider.displayName }.joined(separator: ", "), privacy: .public)")
                 self.updateTitle()
                 self.rebuildMenu()
                 self.statusItem.button?.toolTip = self.toolTipText()
